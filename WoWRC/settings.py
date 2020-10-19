@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'WoWRC',
     'rest_framework',
+    'auth_users',
 
     # allauth
     'allauth',
@@ -129,6 +130,23 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'auth_users.serializers.RegisterSerializer'
+}
+
+AUTH_USER_MODEL = "auth_users.User"
+# Rest auth
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'https://wowrostercreator.herokuapp.com/'
+EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'https://wowrostercreator.herokuapp.com/'
+LOGIN_REDIRECT_URL = 'https://wowrostercreator.herokuapp.com/'
 
 # All auth
 SITE_ID = 1

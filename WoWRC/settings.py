@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
-
+from env.constants import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,13 +43,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'WoWRC',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
     'auth_users',
 
     # allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
+    'allauth.socialaccount.providers.battlenet',
     'custom_user'
 ]
 
@@ -95,6 +98,13 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -154,8 +164,8 @@ SITE_ID = 1
 # All Auth Social Account Info
 BNET_REDIRECT_URI = 'https://wowrostercreator.herokuapp.com/'
 
-CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
-SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')
+CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
+SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {

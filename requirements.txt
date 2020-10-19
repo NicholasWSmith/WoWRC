@@ -2,3 +2,8 @@ django
 gunicorn
 django-heroku
 djangorestframework
+django-allauth
+django-rest-auth
+django-custom-user
+xlrd
+pandas

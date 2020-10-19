@@ -133,6 +133,25 @@ REST_FRAMEWORK = {
 # All auth
 SITE_ID = 1
 
+# All Auth Social Account Info
+BNET_REDIRECT_URI = 'https://wowrostercreator.herokuapp.com/'
+
+CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
+SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'battlenet': {
+        'APP': {
+            'client_id': CLIENT_ID,
+            'secret': SECRET_ID,
+            'key': "",
+        },
+        'SCOPE': ['wow.profile'],
+        'REGION': 'us',
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 

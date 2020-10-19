@@ -8,6 +8,7 @@ __pycache__/
 
 # lol
 .idea
+env/
 
 # Distribution / packaging
 .Python

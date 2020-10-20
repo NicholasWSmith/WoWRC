@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
-from env.constants import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -164,8 +163,13 @@ SITE_ID = 1
 # All Auth Social Account Info
 BNET_REDIRECT_URI = 'https://wowrostercreator.herokuapp.com/'
 
-CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
-SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
+try:
+    from env.constants import *
+    CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
+    SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
+except Exception as e:
+    CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
+    SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {

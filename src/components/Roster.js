@@ -22,7 +22,7 @@ function Roster(props) {
             onDragOver={drag}
             className={props.className}
         >
-            { props.children}
+            { props.children }
         </div>
     )
 }

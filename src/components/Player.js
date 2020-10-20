@@ -4,8 +4,8 @@ function Player(props) {
 
     const dragStart = e => {
         const target = e.target;
-
-        e.dataTransfer.setData('player_id'. target.id)
+        const player_id = e.target.id;
+        e.dataTransfer.setData('player_id', player_id);
 
         setTimeout(() => {
             target.style.display = "none";
@@ -15,7 +15,7 @@ function Player(props) {
     const dragOver = e => {
         e.stopPropagation();
     }
-    
+
     return (
         <div
             id={props.id}

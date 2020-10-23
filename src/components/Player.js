@@ -24,7 +24,7 @@ function Player(props) {
             onDragStart={dragStart}
             onDragOver={dragOver}
         >
-            { props.children }
+            { props.children } 
         </div>
     )
 }

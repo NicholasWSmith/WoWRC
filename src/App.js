@@ -1,25 +1,24 @@
 import React from 'react';
 import './App.css';
-import  Roster from './components/Roster';
-import  Player from './components/Player';
-
+import {Switch, Route, Link } from 'react-router-dom';
+import CreateRoster from './components/CreateRoster';
+import LevelCalc from './components/LevelCalc'
 
 function App() {
   return (
     <div className="App">
-      <main className="flexbox">
-        <Roster id="roster-1" className="roster">
-          <Player id="1" className="player">
-            <p>Card one</p>
-          </Player>
-        </Roster>
-
-        <Roster id="roster-2" className="roster">
-          <Player id="2" className="player">
-            <p>Card two</p>
-          </Player>
-        </Roster>
-      </main>
+      <ul>
+        <li>
+          <Link to="/create"> CreateRoster</Link>
+        </li>
+        <li>
+          <Link to="/lvlcalc"> Level Calcualtor</Link>
+        </li>
+      </ul>
+      <Switch>
+        <Route exact path="/create" component={CreateRoster}/>
+        <Route exact path="/lvlcalc" component={LevelCalc}/>
+      </Switch>
     </div>
   );
 }

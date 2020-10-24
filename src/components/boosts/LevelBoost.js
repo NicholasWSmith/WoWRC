@@ -15,7 +15,7 @@ function LevelBoost(props) {
                 <p>
                     Leveling Boost Calculator
                 </p>
-                <Form.Group controlId="exampleForm.ControlInput1">
+                <Form.Group className="discount" controlId="exampleForm.ControlInput1">
                     <Form.Label>Advertiser Name</Form.Label>
                     <Form.Control type="string" value={adv_name} onChange={advUpdate} placeholder="name-realm" />
                 </Form.Group>

@@ -13,7 +13,7 @@ function App() {
           <Link to="/create"> CreateRoster</Link>
         </li>
         <li>
-          <Link to="/lvlcalc"> Level Calcualtor</Link>
+          <Link to="/lvlcalc"> Level Calculator</Link>
         </li>
       </ul>
       <Switch>

@@ -22,6 +22,7 @@ from allauth.account.views import confirm_email
 
 urlpatterns = [
     path('', index, name="index"),
+    path('', include('auth_users.urls')),
     path('accounts/', include('allauth.urls')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/logout/', LogoutViewEx.as_view(), name='rest_logout'),
@@ -29,5 +30,6 @@ urlpatterns = [
     re_path(r'^rest-auth/registration/account-confirm-email/(?P<key>.+)/$',
             confirm_email, name='account_confirm_email'),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    re_path('.*', index, name="index")
 ]

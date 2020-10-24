@@ -47,7 +47,9 @@ body {
 }
 
 .discount {
-  padding-inline-start: 30%;
-  padding-inline-end: 30%;
+  padding-inline-start: 25%;
+  padding-inline-end: 25%;
   justify-content: center;
 }
+
+

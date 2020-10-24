@@ -24,7 +24,8 @@ function LevelBoost(props) {
     }, []);
 
     return (
-        <div className="center"> 
+        <div className="center">
+            <script data-ad-client="ca-pub-5493170330729204" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> 
             <Form onSubmit={calcCost}>
                 <p>
                     Leveling Boost Calculator
@@ -49,14 +50,16 @@ function LevelBoost(props) {
                                     <Form.Control value={endLevel} onChange={updateEndLevel} type="number" placeholder="ex: 50" />
                                 </Form.Group>
                             </Col>
+
+                            <Col>
+                                <Form.Group controlId="exampleForm.ControlInput2">
+                                    <Form.Label> Discount Amount</Form.Label>
+                                    <Form.Control type="number" value="0" placeholder="ex: 1 (for 1k)" />
+                                </Form.Group>
+                            </Col>
                         </Row>
                     </Container>
                 </div>
-
-                <Form.Group className="discount" controlId="exampleForm.ControlInput2">
-                    <Form.Label> Discount Amount</Form.Label>
-                    <Form.Control type="number" value="0" placeholder="ex: 1 (for 1k)" />
-                </Form.Group>
 
                 <Button className="submit" variant="primary" type="submit">
                     Submit Run

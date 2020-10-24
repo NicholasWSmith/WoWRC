@@ -46,13 +46,13 @@ def get_huokan_prices(request):
         6: 'gbank_deposit'
     }
 
-    total_cols = len(csv_matchup)
     total_rows = 9
 
     url = REQUEST_URL.format(key=HUOKAN_KEY, output=output, sheet_name=sheet, range='c9:i18')
 
     with urllib.request.urlopen(url) as f:
         csv_data = str(f.read())[:-1]
+        
     csv_data = csv_data.replace('b', "")
     csv_data = csv_data.replace('"', "")
     csv_data = csv_data.replace('\\n', ",")

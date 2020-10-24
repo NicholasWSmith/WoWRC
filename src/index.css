@@ -41,3 +41,13 @@ body {
   cursor: pointer;
   margin-bottom: 15px;
 }
+
+.submit {
+  margin: 15px;
+}
+
+.discount {
+  padding-inline-start: 25%;
+  padding-inline-end: 25%;
+  justify-content: center;
+}

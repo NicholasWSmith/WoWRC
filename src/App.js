@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import {Switch, Route, Link } from 'react-router-dom';
 import CreateRoster from './components/CreateRoster';
-import LevelCalc from './components/LevelCalc'
+import LevelCalc from './components/LevelCalc';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

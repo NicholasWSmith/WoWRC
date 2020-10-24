@@ -45,7 +45,7 @@ function LevelBoost(props) {
                 </Form.Group>
 
                 <Button className="submit" variant="primary" type="submit">
-                    Submit
+                    Submit Run
                 </Button>
 
                 <div>

@@ -2,12 +2,14 @@
     background: #000;
     opacity: 0.2;
     z-index: 1;
+    size: 10px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -moz-background-clip: padding;
     -webkit-background-clip: padding;
     background-clip: padding-box;
+    height: 90vh;
   }
    
   .Resizer:hover {

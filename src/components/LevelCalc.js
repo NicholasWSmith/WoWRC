@@ -3,21 +3,27 @@ import SplitPane from 'react-split-pane'
 import '../styles/divider.css'
 import useWindowDimensions from './GetWindowDimensions'
 import LevelBoost from './boosts/LevelBoost';
+import AdSense from 'react-adsense';
 
 function LevelCalc() {
     const { height, width } = useWindowDimensions();
-    const [center, setCenter] = useState(width/2);
     const boost = new LevelBoost();
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     return (
-        <SplitPane split="vertical" minSize={200} defaultSize={center}>
-        <div>
-          {boost}
-        </div>
-        <div>
-          width: {width} ~ height: {height}
-        </div>
-      </SplitPane>
+      <div>
+          <SplitPane split="vertical" minSize={200} defaultSize={width*0.5}>
+            <div>
+              {boost}
+            </div>
+            <div>
+              <AdSense.Google
+                client='ca-pub-5493170330729204'
+                slot='1602176967'
+              />
+            </div>
+        </SplitPane>
+      </div>
     )
 }
 

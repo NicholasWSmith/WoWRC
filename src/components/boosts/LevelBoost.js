@@ -8,14 +8,22 @@ import ls from 'local-storage'
 function LevelBoost(props) {
     var storage_name = ls.get('adv_name') || "";
     const [adv_name, setAdvName] = useState(storage_name);
-    const [gold_dict, setGoldDict] = useState({});
+    const [goldDict, setGoldDict] = useState({});
     const [startLevel, setStart] = useState(10);
     const [endLevel, setEnd] = useState(50);
     const [paid, setPaid] = useState(false);
-    const [buyerTotal, setBuyTotal] = useState(360)
-    const [advTotal, setAdvTotal] = useState(82)
+    const [buyerTotal, setBuyTotal] = useState(0)
+    const [advTotal, setAdvTotal] = useState(0)
     const [discount, setDiscount] = useState(0)
-
+    const [horde, setHorde] = useState(true);
+    
+    // keys are:
+    //advertiser_cut: "1.00"
+    //advertiser_perc: "20.00%"
+    //booster_cut: "3.00"
+    //gbank_deposit: "4.00"
+    //list_price: "5.00"
+    
     useEffect(() => {
         console.log('got here!');
         fetch('get_prices').then(
@@ -24,6 +32,9 @@ function LevelBoost(props) {
             }
         ).then(data => {
            setGoldDict(data);
+        }).then(() => {
+            const defaultBundle = goldDict['bundles']['10-50'];
+            console.log(defaultBundle)
         })
     }, []);
 
@@ -87,6 +98,11 @@ function LevelBoost(props) {
                                     <Form.Check value={paid} onChange={setPaid} type="checkbox" label="Paid" />
                                 </Form.Group>
                             </Col>
+                            <Col className="paid" >
+                                <Form.Group controlId="formBasicCheckbox">
+                                    <Form.Check defaultChecked={horde} value={horde} onChange={setHorde} type="checkbox" label="Horde" />
+                                </Form.Group>
+                            </Col>
                         </Row>
                     </Container>
                 </div>
@@ -125,7 +141,7 @@ function LevelBoost(props) {
 
     function calcCost(data){
         data.preventDefault();
-        console.log(gold_dict);
+        console.log(goldDict);
     }
     
     function advUpdate(event){

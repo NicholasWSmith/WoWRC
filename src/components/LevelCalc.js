@@ -8,8 +8,6 @@ import AdSense from 'react-adsense';
 function LevelCalc() {
     const { height, width } = useWindowDimensions();
     const boost = new LevelBoost();
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
     return (
       <div>
           <SplitPane split="vertical" minSize={200} defaultSize={width*0.5}>

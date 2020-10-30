@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import { Container, Row, Col } from 'reactstrap';
 import ls from 'local-storage'
-
+import {Helmet} from "react-helmet";
 
 function LevelBoost(props) {
     var storage_name = ls.get('adv_name') || "";
@@ -40,7 +40,11 @@ function LevelBoost(props) {
 
     return (
         <div className="center">
-            <script data-ad-client="ca-pub-5493170330729204" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> 
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Huokan Lvl Calc</title>
+                <script data-ad-client="ca-pub-5493170330729204" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            </Helmet>
             <Form>
                 <p>
                     Leveling Boost Calculator 

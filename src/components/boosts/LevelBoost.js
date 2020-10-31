@@ -18,11 +18,11 @@ function LevelBoost(props) {
     const [horde, setHorde] = useState(true);
     
     // keys are:
-    //advertiser_cut: "1.00"
-    //advertiser_perc: "20.00%"
-    //booster_cut: "3.00"
-    //gbank_deposit: "4.00"
-    //list_price: "5.00"
+    // advertiser_cut: "1.00"
+    // advertiser_perc: "20.00%"
+    // booster_cut: "3.00"
+    // gbank_deposit: "4.00"
+    // list_price: "5.00"
     
     useEffect(() => {
         console.log('got here!');
@@ -32,9 +32,14 @@ function LevelBoost(props) {
             }
         ).then(data => {
            setGoldDict(data);
-        }).then(() => {
-            const defaultBundle = goldDict['bundles']['10-50'];
-            console.log(defaultBundle)
+           return data;
+        }).then((data) => {
+            const defaultBundle = data['bundles']['10-50'];
+            var list_price = defaultBundle['list_price'];
+            var boost_cut = defaultBundle['boost_cut'];
+            var advertiser_cut = defaultBundle['advertiser_cut']
+            setBuyTotal(list_price);
+            setAdvTotal(advertiser_cut);
         })
     }, []);
 
@@ -143,9 +148,8 @@ function LevelBoost(props) {
         </div>
     )
 
-    function calcCost(data){
-        data.preventDefault();
-        console.log(goldDict);
+    function calcCost(){
+        
     }
     
     function advUpdate(event){
@@ -161,6 +165,7 @@ function LevelBoost(props) {
             level = 0;
         }
         setStart(level);
+        calcCost();
     }
     
     function updateEndLevel(event){
@@ -169,6 +174,7 @@ function LevelBoost(props) {
             level = 0;
         }
         setEnd(level);
+        calcCost();
     }
 
     function createOffer(event) {

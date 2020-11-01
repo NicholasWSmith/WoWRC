@@ -16,7 +16,9 @@ function LevelBoost(props) {
     const [advTotal, setAdvTotal] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [horde, setHorde] = useState(true);
-    
+    const [boosterCut, setBoostCut] = useState(0);
+    const [vip, setVIP] = useState(true);
+
     // keys are:
     // advertiser_cut: "1.00"
     // advertiser_perc: "20.00%"
@@ -34,12 +36,13 @@ function LevelBoost(props) {
            setGoldDict(data);
            return data;
         }).then((data) => {
-            const defaultBundle = data['bundles']['10-50'];
+            const defaultBundle = data['vip']['bundles']['10-50'];
             var list_price = defaultBundle['list_price'];
             var boost_cut = defaultBundle['boost_cut'];
             var advertiser_cut = defaultBundle['advertiser_cut']
             setBuyTotal(list_price);
             setAdvTotal(advertiser_cut);
+            setBoostCut(boost_cut);
         })
     }, []);
 
@@ -89,28 +92,30 @@ function LevelBoost(props) {
                 <div>
                     <Container>
                         <Row>
-                            <Col>
+                            <Col sm={4}>
                                 <Form.Group controlId="buyerOwes">
                                     <Form.Label> Buyer Owes</Form.Label>
                                     <Form.Control value={buyerTotal} type="number" />
                                 </Form.Group>
                             </Col>
-                            
-                            <Col>
+                            <Col sm={4}>
                                 <Form.Group controlId="advCut">
                                     <Form.Label> Advertiser Cut </Form.Label>
                                     <Form.Control value={advTotal} type="number"/>
                                 </Form.Group>
                             </Col>
-                            <Col className="paid" >
-                                <Form.Group controlId="formBasicCheckbox">
-                                    <Form.Check value={paid} onChange={setPaid} type="checkbox" label="Paid" />
-                                </Form.Group>
-                            </Col>
-                            <Col className="paid" >
-                                <Form.Group controlId="formBasicCheckbox">
-                                    <Form.Check defaultChecked={horde} value={horde} onChange={setHorde} type="checkbox" label="Horde" />
-                                </Form.Group>
+                            <Col sm={4}>
+                                <Row>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check value={paid} onChange={setPaid} type="checkbox" label="Paid" />
+                                    </Form.Group>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check defaultChecked={vip} value={vip} onChange={setVIP} type="checkbox" label="VIP" />
+                                    </Form.Group>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check defaultChecked={horde} value={horde} onChange={setHorde} type="checkbox" label="Horde" />
+                                    </Form.Group>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>

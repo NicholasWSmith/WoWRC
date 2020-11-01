@@ -12,7 +12,6 @@ import csv
 from rest_framework.decorators import api_view, renderer_classes, permission_classes
 from rest_framework.renderers import JSONRenderer
 
-
 HUOKAN_SHEET_URL = 'https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ'
 
 REQUEST_URL = "https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:{output}&sheet={sheet_name}&range={range}"
@@ -32,9 +31,16 @@ def get_huokan_prices(request):
     output = 'csv'
 
     gold_dict = {
-        "per_level": {
+        "vip": {
+            "per_level": {
+            },
+            "bundles": {
+            }
         },
-        "bundles": {
+        "scheduled": {
+            "bundles": {
+
+            }
         }
 
     }
@@ -46,13 +52,13 @@ def get_huokan_prices(request):
         6: 'gbank_deposit'
     }
 
-    total_rows = 9
+    total_rows = 14
 
-    url = REQUEST_URL.format(key=HUOKAN_KEY, output=output, sheet_name=sheet, range='c9:i18')
+    url = REQUEST_URL.format(key=HUOKAN_KEY, output=output, sheet_name=sheet, range='c10:i26')
 
     with urllib.request.urlopen(url) as f:
         csv_data = str(f.read())[:-1]
-        
+
     csv_data = csv_data.replace('b', "")
     csv_data = csv_data.replace('"', "")
     csv_data = csv_data.replace('\\n', ",")
@@ -67,8 +73,10 @@ def get_huokan_prices(request):
         for item in csv_matchup:
             line[csv_matchup[item]] = current_data[item]
         if i <= 3:
-            gold_dict['per_level'][key] = line
+            gold_dict['vip']['per_level'][key] = line
+        elif 4 <= i <= 8:
+            gold_dict['vip']['bundles'][key] = line
         else:
-            gold_dict['bundles'][key] = line
+            gold_dict['scheduled']['bundles'][key] = line
 
     return Response(gold_dict, status=status.HTTP_200_OK)

@@ -18,6 +18,13 @@ function LevelBoost(props) {
     const [horde, setHorde] = useState(true);
     const [boosterCut, setBoostCut] = useState(0);
     const [vip, setVIP] = useState(true);
+    const levelRanges = [
+        [10, 30, '10-30'],
+        [30, 40, '30-40'],
+        [40, 45, '40-45'],
+        [45, 50, '45-50'],
+        [10, 50, '10-50']
+    ];
 
     // keys are:
     // advertiser_cut: "1.00"
@@ -37,7 +44,7 @@ function LevelBoost(props) {
            return data;
         }).then((data) => {
             const defaultBundle = data['vip']['bundles']['10-50'];
-            setPrices(defaultBundle);
+            setBundlePrices(defaultBundle);
         })
     }, []);
 
@@ -79,24 +86,74 @@ function LevelBoost(props) {
     }
 
     function calcCost(start, end){
-        // Means that we can get a full bundle price
-        if (start % 10 == 0 && end % 10 == 0) {
-            var key = String(start) + "-" + String(end)
-            if (vip) {
-                var bundlePrice = goldDict['vip']['bundles'][key];
-            }
-            
-            setPrices(bundlePrice);
-        }
+        if (vip) {
+            // Means that we can get a full bundle price
+            if (start % 10 == 0 && end % 10 == 0) {
+                var key = String(start) + "-" + String(end);
 
+                
+                for (var i in levelRanges){
+                    if (key == levelRanges[i][2]){
+                        var bundlePrice = goldDict['vip']['bundles'][key];
+                        setBundlePrices(bundlePrice);
+                        return;
+                    }
+                }
+
+                // Edge case where per level is actually cheaper. 
+                if (start == 10 && end == 20){
+                    var price = goldDict['vip']['per_level']['10-30'];
+                    setPerLevelPrices(price, 10)
+                    return;
+                }
+
+                if (start == 10 && end == 40){
+                    var price1 = goldDict['vip']['bundles']['10-30'];
+                    var price2 = goldDict['vip']['bundles']['30-40']
+
+                    var cost = {
+                        'list_price': parseInt(price1['list_price']) + parseInt(price2['list_price']),
+                        'boost_cut': parseInt(price1['list_price']) + parseInt(price2['boost_cut']),
+                        'advertiser_cut': parseInt(price1['advertiser_cut']) + parseInt(price2['advertiser_cut'])
+                    }
+                    setBundlePrices(cost);
+                    return;
+                }
+                
+            // Means we gotta do some math...
+            // Most of the time, the end result is 50. 
+            // Per level until round #, then bundles rest of the way. 
+            } else if (end == 50) {
+                for (var i in levelRanges){
+                    // If start is less than the end range, its within this range. 
+                    if (start < levelRanges[i][1]){
+                        // per level at this range. 
+                        var levelDiff = start - levelRanges[i][1];
+                    }
+                }
+            }
+        }
     }
 
-    function setPrices(defaultBundle){
+    function setBundlePrices(defaultBundle){
         var list_price = defaultBundle['list_price'];
         var boost_cut = defaultBundle['boost_cut'];
         var advertiser_cut = defaultBundle['advertiser_cut']
-        setBuyTotal(list_price);
-        setAdvTotal(advertiser_cut);
+        setBuyTotal(list_price - discount);
+        setAdvTotal(advertiser_cut - discount);
+        setBoostCut(boost_cut);
+    }
+
+    function setMultiBundlePrices(multiBundle){
+
+    }
+
+    function setPerLevelPrices(levelDict, levels){
+        var list_price = levelDict['list_price'] * levels;
+        var boost_cut = levelDict['boost_cut'] * levels;
+        var advertiser_cut = levelDict['advertiser_cut'] * levels;
+        setBuyTotal(list_price - discount);
+        setAdvTotal(advertiser_cut - discount);
         setBoostCut(boost_cut);
     }
 

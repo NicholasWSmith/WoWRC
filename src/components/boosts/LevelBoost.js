@@ -37,14 +37,68 @@ function LevelBoost(props) {
            return data;
         }).then((data) => {
             const defaultBundle = data['vip']['bundles']['10-50'];
-            var list_price = defaultBundle['list_price'];
-            var boost_cut = defaultBundle['boost_cut'];
-            var advertiser_cut = defaultBundle['advertiser_cut']
-            setBuyTotal(list_price);
-            setAdvTotal(advertiser_cut);
-            setBoostCut(boost_cut);
+            setPrices(defaultBundle);
         })
     }, []);
+
+    function advUpdate(event){
+        event.preventDefault();
+        var adv_name = event.target.value;
+        setAdvName(adv_name);
+        ls.set('adv_name', adv_name);
+    }
+
+    function updateStartLevel(event){
+        var level = parseInt(event.target.value);
+        if (level == NaN){
+            level = 0;
+        }
+        setStart(level);
+        calcCost(level, endLevel);
+    }
+    
+    function updateEndLevel(event){
+        var level = parseInt(event.target.value);
+        if (level == NaN){
+            level = 0;
+        }
+        setEnd(level);
+        calcCost(startLevel, level);
+    }
+
+    function createOffer(event) {
+
+    }
+
+    function submitRun(event) {
+
+    }
+
+    function copyElement(event){
+
+    }
+
+    function calcCost(start, end){
+        // Means that we can get a full bundle price
+        if (start % 10 == 0 && end % 10 == 0) {
+            var key = String(start) + "-" + String(end)
+            if (vip) {
+                var bundlePrice = goldDict['vip']['bundles'][key];
+            }
+            
+            setPrices(bundlePrice);
+        }
+
+    }
+
+    function setPrices(defaultBundle){
+        var list_price = defaultBundle['list_price'];
+        var boost_cut = defaultBundle['boost_cut'];
+        var advertiser_cut = defaultBundle['advertiser_cut']
+        setBuyTotal(list_price);
+        setAdvTotal(advertiser_cut);
+        setBoostCut(boost_cut);
+    }
 
     return (
         <div className="center">
@@ -152,47 +206,6 @@ function LevelBoost(props) {
             </Form>
         </div>
     )
-
-    function calcCost(){
-        
-    }
-    
-    function advUpdate(event){
-        event.preventDefault();
-        var adv_name = event.target.value;
-        setAdvName(adv_name);
-        ls.set('adv_name', adv_name);
-    }
-
-    function updateStartLevel(event){
-        var level = event.target.value;
-        if (level == null){
-            level = 0;
-        }
-        setStart(level);
-        calcCost();
-    }
-    
-    function updateEndLevel(event){
-        var level = event.target.value;
-        if (level == null){
-            level = 0;
-        }
-        setEnd(level);
-        calcCost();
-    }
-
-    function createOffer(event) {
-
-    }
-
-    function submitRun(event) {
-
-    }
-
-    function copyElement(event){
-
-    }
 }
 
 

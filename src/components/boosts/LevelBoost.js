@@ -55,7 +55,7 @@ function LevelBoost(props) {
             </Helmet>
             <Form>
                 <p>
-                    Leveling Boost Calculator 
+                    Huokan Leveling Boost Calculator <a href="https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ/edit#gid=1345316560" target="_blank"> Excel sheet</a>
                     <br />
                     All values are in <b> 000's of gold</b> (ex: 1.0 = 1000)
                 </p>

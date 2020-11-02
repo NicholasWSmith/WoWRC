@@ -57,8 +57,8 @@ function LevelBoost(props) {
 
     function updateStartLevel(event){
         var level = parseInt(event.target.value);
-        if (level == NaN){
-            level = 0;
+        if (level == NaN || level < 10 || level > 50){
+            level = 10;
         }
         setStart(level);
         calcCost(level, endLevel);
@@ -66,8 +66,8 @@ function LevelBoost(props) {
     
     function updateEndLevel(event){
         var level = parseInt(event.target.value);
-        if (level == NaN){
-            level = 0;
+        if (level == NaN || level < 10 || level > 50){
+            level = 50;
         }
         setEnd(level);
         calcCost(startLevel, level);
@@ -128,7 +128,8 @@ function LevelBoost(props) {
                     // If start is less than the end range, its within this range. 
                     if (start < levelRanges[i][1]){
                         // per level at this range. 
-                        var levelDiff = start - levelRanges[i][1];
+                        var levelDiff = levelRanges[i][1] - start;
+                        var levelPrices = goldDict['vip']['per_level'][levelRanges[i][2]]
                     }
                 }
             }

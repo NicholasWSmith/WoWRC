@@ -90,6 +90,7 @@ def get_discord_url(request):
     DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID', None)
     DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID', None)
     # https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=code&redirect_uri=${redirect}`
-    discord_url = ('https://discordapp.com/api/oauth2/authorize?client_id={}'
-                   '&scope=identify%20guilds&response_type=code&redirect_uri={}').format(DISC_CLIENT_ID, DISC_SECRET_ID)
-    return discord_url
+    discord_url = ('https://discord.com/api/oauth2/authorize?client_id={}'
+                   '&redirect_uri=https%3A%2F%2Fwowrostercreator.herokuapp.com%2Fdiscord_redirect&response_type=code'
+                   '&scope=identify%20guilds').format(DISC_CLIENT_ID)
+    return Response(discord_url, status=status.HTTP_200_OK)

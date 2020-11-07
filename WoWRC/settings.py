@@ -167,8 +167,6 @@ try:
     from env.constants import *
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
-    DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID')
-    DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID')
 except Exception as e:
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')

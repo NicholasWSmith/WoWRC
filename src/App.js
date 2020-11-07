@@ -27,11 +27,6 @@ function App() {
       <Alert variant={'primary'} dismissible>
         Ads help us keep this service free of charge to use! Please consider turning off Adblock :) 
       </Alert>
-      <ul>
-        <li>
-          <Link to="/create"> CreateRoster</Link>
-        </li>
-      </ul>
       <Switch>
         <Route exact path="/create" component={CreateRoster}/>
       </Switch>

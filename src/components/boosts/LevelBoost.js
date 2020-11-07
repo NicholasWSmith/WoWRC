@@ -16,13 +16,22 @@ function LevelBoost(props) {
     const [advTotal, setAdvTotal] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [horde, setHorde] = useState(true);
-    
+    const [boosterCut, setBoostCut] = useState(0);
+    const [vip, setVIP] = useState(true);
+    const levelRanges = [
+        [10, 30, '10-30'],
+        [30, 40, '30-40'],
+        [40, 45, '40-45'],
+        [45, 50, '45-50'],
+        [10, 50, '10-50']
+    ];
+
     // keys are:
-    //advertiser_cut: "1.00"
-    //advertiser_perc: "20.00%"
-    //booster_cut: "3.00"
-    //gbank_deposit: "4.00"
-    //list_price: "5.00"
+    // advertiser_cut: "1.00"
+    // advertiser_perc: "20.00%"
+    // booster_cut: "3.00"
+    // gbank_deposit: "4.00"
+    // list_price: "5.00"
     
     useEffect(() => {
         console.log('got here!');
@@ -32,11 +41,170 @@ function LevelBoost(props) {
             }
         ).then(data => {
            setGoldDict(data);
-        }).then(() => {
-            const defaultBundle = goldDict['bundles']['10-50'];
-            console.log(defaultBundle)
+           return data;
+        }).then((data) => {
+            const defaultBundle = data['vip']['bundles']['10-50'];
+            setBundlePrices(defaultBundle);
         })
     }, []);
+
+    function advUpdate(event){
+        event.preventDefault();
+        var adv_name = event.target.value;
+        setAdvName(adv_name);
+        ls.set('adv_name', adv_name);
+    }
+
+    function updateStartLevel(event){
+        var level = parseInt(event.target.value);
+        if (level == NaN){
+            level = 10;
+        }
+        setStart(level);
+        calcCost(level, endLevel);
+    }
+    
+    function updateEndLevel(event){
+        var level = parseInt(event.target.value);
+        if (level == NaN){
+            level = 50;
+        }
+        setEnd(level);
+        calcCost(startLevel, level);
+    }
+
+    function createOffer(event) {
+
+    }
+
+    function submitRun(event) {
+
+    }
+
+    function copyElement(event){
+
+    }
+
+    function calcCost(start, end){
+        if (vip && start > 10 && end > 10) {
+            // // Means that we can get a full bundle price
+            // if (start % 10 == 0 && end % 10 == 0) {
+            //     var key = String(start) + "-" + String(end);
+
+                
+            //     for (var i in levelRanges){
+            //         if (key == levelRanges[i][2]){
+            //             var bundlePrice = goldDict['vip']['bundles'][key];
+            //             setBundlePrices(bundlePrice);
+            //             return;
+            //         }
+            //     }
+
+            //     // Edge case where per level is actually cheaper. 
+            //     if (start == 10 && end == 20){
+            //         var price = goldDict['vip']['per_level']['10-30'];
+            //         setPerLevelPrices(price, 10)
+            //         return;
+            //     }
+
+            //     if (start == 10 && end == 40){
+            //         var price1 = goldDict['vip']['bundles']['10-30'];
+            //         var price2 = goldDict['vip']['bundles']['30-40']
+
+            //         var cost = {
+            //             'list_price': parseInt(price1['list_price']) + parseInt(price2['list_price']),
+            //             'boost_cut': parseInt(price1['list_price']) + parseInt(price2['boost_cut']),
+            //             'advertiser_cut': parseInt(price1['advertiser_cut']) + parseInt(price2['advertiser_cut'])
+            //         }
+            //         setBundlePrices(cost);
+            //         return;
+            //     }
+                
+            // Means we gotta do some math...
+            // Most of the time, the end result is 50. 
+            // Per level until round #, then bundles rest of the way. 
+            if (end == 50) {
+                var key = String(start) + "-" + String(end);
+
+                
+                for (var i in levelRanges){
+                    if (key == levelRanges[i][2]){
+                        var bundlePrice = goldDict['vip']['bundles'][key];
+                        setBundlePrices(bundlePrice);
+                        return;
+                    }
+                }
+
+                if (start == 10 && end == 40){
+                    var price1 = goldDict['vip']['bundles']['10-30'];
+                    var price2 = goldDict['vip']['bundles']['30-40']
+
+                    var cost = {
+                        'list_price': parseInt(price1['list_price']) + parseInt(price2['list_price']),
+                        'boost_cut': parseInt(price1['list_price']) + parseInt(price2['boost_cut']),
+                        'advertiser_cut': parseInt(price1['advertiser_cut']) + parseInt(price2['advertiser_cut'])
+                    }
+                    setBundlePrices(cost);
+                    return;
+                }
+
+                var perLevel = true;
+
+                var totalPriceDict = {
+                    'list_price': 0,
+                    'booster_cut': 0,
+                    'advertiser_cut': 0
+                };
+
+                for (var i in levelRanges){
+
+                    if (perLevel == false && levelRanges[i][2] != "10-50"){
+                        var curBundle = goldDict['vip']['bundles'][levelRanges[i][2]]
+                        totalPriceDict['list_price'] += parseInt(curBundle['list_price']);
+                        totalPriceDict['booster_cut'] += parseInt(curBundle['booster_cut']);
+                        totalPriceDict['advertiser_cut'] += parseInt(curBundle['advertiser_cut']);
+                    }
+
+                    // If start is less than the end range, its within this range. 
+                    if (start < levelRanges[i][1] && perLevel == true){
+                        // per level at this range. 
+                        var levelDiff = levelRanges[i][1] - start;
+                        var levelPrices = goldDict['vip']['per_level'][levelRanges[i][2]];
+
+                        totalPriceDict['list_price'] = parseInt(levelPrices['list_price']) * levelDiff;
+                        totalPriceDict['booster_cut'] = parseInt(levelPrices['booster_cut']) * levelDiff;
+                        totalPriceDict['advertiser_cut'] = parseInt(levelPrices['advertiser_cut']) * levelDiff;
+                        // now that we have calculated everything per level, the rest of the loop can add bundles.
+                        perLevel = false;
+                    }
+                }
+                setBundlePrices(totalPriceDict);
+                return;
+            }
+        }
+    }
+
+    function setBundlePrices(defaultBundle){
+        var list_price = defaultBundle['list_price'];
+        var boost_cut = defaultBundle['booster_cut'];
+        var advertiser_cut = defaultBundle['advertiser_cut']
+        setBuyTotal(list_price - discount);
+        setAdvTotal(advertiser_cut - discount);
+        setBoostCut(boost_cut);
+    }
+
+    function setMultiBundlePrices(multiBundle){
+
+    }
+
+    function setPerLevelPrices(levelDict, levels){
+        var list_price = levelDict['list_price'] * levels;
+        var boost_cut = levelDict['boost_cut'] * levels;
+        var advertiser_cut = levelDict['advertiser_cut'] * levels;
+        setBuyTotal(list_price - discount);
+        setAdvTotal(advertiser_cut - discount);
+        setBoostCut(boost_cut);
+    }
 
     return (
         <div className="center">
@@ -47,7 +215,7 @@ function LevelBoost(props) {
             </Helmet>
             <Form>
                 <p>
-                    Leveling Boost Calculator 
+                    Huokan Leveling Boost Calculator <a href="https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ/edit#gid=1345316560" target="_blank"> Excel sheet</a>
                     <br />
                     All values are in <b> 000's of gold</b> (ex: 1.0 = 1000)
                 </p>
@@ -84,28 +252,30 @@ function LevelBoost(props) {
                 <div>
                     <Container>
                         <Row>
-                            <Col>
+                            <Col sm={4}>
                                 <Form.Group controlId="buyerOwes">
                                     <Form.Label> Buyer Owes</Form.Label>
                                     <Form.Control value={buyerTotal} type="number" />
                                 </Form.Group>
                             </Col>
-                            
-                            <Col>
+                            <Col sm={4}>
                                 <Form.Group controlId="advCut">
                                     <Form.Label> Advertiser Cut </Form.Label>
                                     <Form.Control value={advTotal} type="number"/>
                                 </Form.Group>
                             </Col>
-                            <Col className="paid" >
-                                <Form.Group controlId="formBasicCheckbox">
-                                    <Form.Check value={paid} onChange={setPaid} type="checkbox" label="Paid" />
-                                </Form.Group>
-                            </Col>
-                            <Col className="paid" >
-                                <Form.Group controlId="formBasicCheckbox">
-                                    <Form.Check defaultChecked={horde} value={horde} onChange={setHorde} type="checkbox" label="Horde" />
-                                </Form.Group>
+                            <Col sm={4}>
+                                <Row>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check value={paid} onChange={setPaid} type="checkbox" label="Paid" />
+                                    </Form.Group>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check defaultChecked={vip} value={vip} onChange={setVIP} type="checkbox" label="VIP" />
+                                    </Form.Group>
+                                    <Form.Group className="paid" controlId="formBasicCheckbox">
+                                        <Form.Check defaultChecked={horde} value={horde} onChange={setHorde} type="checkbox" label="Horde" />
+                                    </Form.Group>
+                                </Row>
                             </Col>
                         </Row>
                     </Container>
@@ -142,46 +312,6 @@ function LevelBoost(props) {
             </Form>
         </div>
     )
-
-    function calcCost(data){
-        data.preventDefault();
-        console.log(goldDict);
-    }
-    
-    function advUpdate(event){
-        event.preventDefault();
-        var adv_name = event.target.value;
-        setAdvName(adv_name);
-        ls.set('adv_name', adv_name);
-    }
-
-    function updateStartLevel(event){
-        var level = event.target.value;
-        if (level == null){
-            level = 0;
-        }
-        setStart(level);
-    }
-    
-    function updateEndLevel(event){
-        var level = event.target.value;
-        if (level == null){
-            level = 0;
-        }
-        setEnd(level);
-    }
-
-    function createOffer(event) {
-
-    }
-
-    function submitRun(event) {
-
-    }
-
-    function copyElement(event){
-
-    }
 }
 
 

@@ -11,6 +11,7 @@ import SplitPane from 'react-split-pane'
 import useWindowDimensions from './components/GetWindowDimensions'
 import AdSense from 'react-adsense';
 import './styles/divider.css';
+import Discord from './components/discord';
 
 function App() {
   ReactGA.initialize('UA-109529411-1');
@@ -29,6 +30,7 @@ function App() {
       </Alert>
       <Switch>
         <Route exact path="/create" component={CreateRoster}/>
+        <Route exact path="/discord_redirect" component={Discord}/>
       </Switch>
       <SplitPane split="vertical" minSize={200} defaultSize={width*0.5}>
           <div>

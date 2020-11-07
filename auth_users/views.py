@@ -19,6 +19,13 @@ REQUEST_URL = "https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:{out
 
 HUOKAN_KEY = "155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ"
 
+try:
+    from env.constants import *
+    DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID', DISC_C_ID)
+    DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID', DISC_SECRET)
+except Exception as e:
+    DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID')
+    DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID')
 
 class LogoutViewEx(LogoutView):
     authentication_classes = (authentication.TokenAuthentication,)
@@ -87,8 +94,6 @@ def get_huokan_prices(request):
 @renderer_classes((JSONRenderer,))
 @permission_classes((AllowAny,))
 def get_discord_url(request):
-    DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID', None)
-    DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID', None)
     # https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=code&redirect_uri=${redirect}`
     discord_url = ('https://discord.com/api/oauth2/authorize?client_id={}'
                    '&redirect_uri=https%3A%2F%2Fwowrostercreator.herokuapp.com%2Fdiscord_redirect&response_type=code'

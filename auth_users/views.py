@@ -21,11 +21,13 @@ HUOKAN_KEY = "155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ"
 
 try:
     from env.constants import *
+
     DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID', DISC_C_ID)
     DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID', DISC_SECRET)
 except Exception as e:
     DISC_CLIENT_ID = os.environ.get('DISC_CLIENT_ID')
     DISC_SECRET_ID = os.environ.get('DISC_SECRET_ID')
+
 
 class LogoutViewEx(LogoutView):
     authentication_classes = (authentication.TokenAuthentication,)
@@ -95,7 +97,10 @@ def get_huokan_prices(request):
 @permission_classes((AllowAny,))
 def get_discord_url(request):
     # https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=code&redirect_uri=${redirect}`
+
     discord_url = ('https://discord.com/api/oauth2/authorize?client_id={}'
-                   '&redirect_uri=https%3A%2F%2Fwowrostercreator.herokuapp.com%2Fdiscord_redirect&response_type=code'
+                   '&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcreate'
+                   '&response_type=code'
                    '&scope=identify%20guilds').format(DISC_CLIENT_ID)
+
     return Response(discord_url, status=status.HTTP_200_OK)

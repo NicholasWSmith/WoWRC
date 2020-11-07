@@ -6,5 +6,10 @@ urlpatterns = [
         'get_prices',
         views.get_huokan_prices,
         name="get huokan prices"
+    ),
+    path(
+        'discord',
+        views.get_discord_url,
+        name="get_discord_url"
     )
 ]

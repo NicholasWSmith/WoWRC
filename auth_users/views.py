@@ -11,6 +11,7 @@ import json
 import csv
 from rest_framework.decorators import api_view, renderer_classes, permission_classes
 from rest_framework.renderers import JSONRenderer
+from WoWRC.settings import DISC_CLIENT_ID, DISC_SECRET_ID
 
 HUOKAN_SHEET_URL = 'https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ'
 
@@ -80,3 +81,13 @@ def get_huokan_prices(request):
             gold_dict['scheduled']['bundles'][key] = line
 
     return Response(gold_dict, status=status.HTTP_200_OK)
+
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+@permission_classes((AllowAny,))
+def get_discord_url(request):
+    # https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&scope=identify&response_type=code&redirect_uri=${redirect}`
+    discord_url = ('https://discordapp.com/api/oauth2/authorize?client_id={}'
+                   '&scope=identify&response_type=code&redirect_uri={}').format(DISC_CLIENT_ID, DISC_SECRET_ID)
+    return discord_url

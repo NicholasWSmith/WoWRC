@@ -12,6 +12,7 @@ import csv
 from rest_framework.decorators import api_view, renderer_classes, permission_classes
 from rest_framework.renderers import JSONRenderer
 import os
+from django.conf import settings
 
 HUOKAN_SHEET_URL = 'https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ'
 
@@ -104,3 +105,24 @@ def get_discord_url(request):
                    '&scope=identify%20guilds').format(DISC_CLIENT_ID)
 
     return Response(discord_url, status=status.HTTP_200_OK)
+
+
+import json
+from bson import ObjectId
+
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+@permission_classes((AllowAny,))
+def test_mongo(request):
+    db = settings.CLIENT['us-horde']
+    players = db.runs.find_one({'boostersId.DPS.boosterId': '12345'})
+
+    return Response(JSONEncoder().encode(players), status=status.HTTP_200_OK)

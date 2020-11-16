@@ -11,5 +11,10 @@ urlpatterns = [
         'discord',
         views.get_discord_url,
         name="get_discord_url"
+    ),
+    path(
+        'test',
+        views.test_mongo,
+        name="get_discord_url"
     )
 ]

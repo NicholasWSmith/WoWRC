@@ -7,3 +7,4 @@ django-rest-auth
 django-custom-user
 xlrd
 pandas
+pymongo

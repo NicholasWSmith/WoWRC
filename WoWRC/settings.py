@@ -13,9 +13,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
+#  MongoDB
+from WoWRC.db import mongoDb
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,7 +29,6 @@ SECRET_KEY = 'x2@9)q*=!101z0*ta19sgl(melapo^ctuy)4hrv+m@h#b=(jif'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -86,7 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'WoWRC.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -96,6 +96,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+CLIENT = mongoDb().get_client()
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -165,12 +167,12 @@ BNET_REDIRECT_URI = 'https://wowrostercreator.herokuapp.com/'
 
 try:
     from env.constants import *
+
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
 except Exception as e:
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')
-
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {
@@ -183,7 +185,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'REGION': 'us',
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -205,8 +206,6 @@ django_heroku.settings(locals())
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
-
-print(STATIC_ROOT)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'build', 'media')

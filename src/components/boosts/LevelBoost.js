@@ -22,8 +22,7 @@ function LevelBoost(props) {
         [10, 30, '10-30'],
         [30, 40, '30-40'],
         [40, 45, '40-45'],
-        [45, 50, '45-50'],
-        [10, 50, '10-50']
+        [45, 50, '45-50']
     ];
 
     // keys are:
@@ -86,6 +85,7 @@ function LevelBoost(props) {
     }
 
     function calcCost(start, end){
+        var sanityCheck = [];
         if (vip && start > 10 && end > 10) {
             // // Means that we can get a full bundle price
             // if (start % 10 == 0 && end % 10 == 0) {
@@ -122,22 +122,26 @@ function LevelBoost(props) {
                 
             // Means we gotta do some math...
             // Most of the time, the end result is 50. 
-            // Per level until round #, then bundles rest of the way. 
+            // Per level until round #, then bundles rest of the way.
+            if (start == 10 && end == 50){
+                var bundlePrice = goldDict['vip']['bundles']['10-50'];
+                setBundlePrices(bundlePrice);
+                var sanityString = "Using a 10-50 bundle price for: " + bundlePrice['list_price'];
+                sanityCheck.push(sanityString); 
+                return;
+            }
             if (end == 50) {
                 var key = String(start) + "-" + String(end);
 
-                
-                for (var i in levelRanges){
-                    if (key == levelRanges[i][2]){
-                        var bundlePrice = goldDict['vip']['bundles'][key];
-                        setBundlePrices(bundlePrice);
-                        return;
-                    }
-                }
-
+                // Check all the multiple bundles (not a key, but will be multiple bundles)
                 if (start == 10 && end == 40){
                     var price1 = goldDict['vip']['bundles']['10-30'];
                     var price2 = goldDict['vip']['bundles']['30-40']
+                    var sanityString1 = "Using a 10-30 bundle price for: " + price1['list_price'];
+                    var sanityString2 = "Using a 30-40 bundle price for: " + price2['list_price'];
+
+                    sanityCheck.push(sanityString1);
+                    sanityCheck.push(sanityString2);
 
                     var cost = {
                         'list_price': parseInt(price1['list_price']) + parseInt(price2['list_price']),
@@ -148,6 +152,38 @@ function LevelBoost(props) {
                     return;
                 }
 
+                if (start == 10 && end == 45){
+                    var price1 = goldDict['vip']['bundles']['10-30'];
+                    var price2 = goldDict['vip']['bundles']['30-40'];
+                    var price3 = goldDict['vip']['bundles']['40-45'];
+                    var sanityString1 = "Using a 10-30 bundle price for: " + price1['list_price'];
+                    var sanityString2 = "Using a 30-40 bundle price for: " + price2['list_price'];
+                    var sanityString3 = "Using a 40-45 bundle price for: " + price3['list_price'];
+
+                    sanityCheck.push(sanityString1);
+                    sanityCheck.push(sanityString2);
+                    sanityCheck.push(sanityString3);
+
+                    var cost = {
+                        'list_price': parseInt(price1['list_price']) + parseInt(price2['list_price']) + parseInt(price3['list_price']),
+                        'boost_cut': parseInt(price1['list_price']) + parseInt(price2['boost_cut']) + parseInt(price3['boost_price']),
+                        'advertiser_cut': parseInt(price1['advertiser_cut']) + parseInt(price2['advertiser_cut']) + parseInt(price3['advertiser_price'])
+                    }
+                    setBundlePrices(cost);
+                    return;
+                }
+                
+                // Check and see if its just a single bundle run
+                for (var i in levelRanges){
+                    if (key == levelRanges[i][2]){
+                        var bundlePrice = goldDict['vip']['bundles'][key];
+                        setBundlePrices(bundlePrice);
+                        var sanityString = "Using a " + key + " bundle price for: " + bundlePrice['list_price'];
+                        sanityCheck.push(sanityString);
+                        return;
+                    }
+                }
+
                 var perLevel = true;
 
                 var totalPriceDict = {
@@ -156,9 +192,10 @@ function LevelBoost(props) {
                     'advertiser_cut': 0
                 };
 
+                //At this point we will have to check about 
                 for (var i in levelRanges){
 
-                    if (perLevel == false && levelRanges[i][2] != "10-50"){
+                    if (perLevel == false){
                         var curBundle = goldDict['vip']['bundles'][levelRanges[i][2]]
                         totalPriceDict['list_price'] += parseInt(curBundle['list_price']);
                         totalPriceDict['booster_cut'] += parseInt(curBundle['booster_cut']);

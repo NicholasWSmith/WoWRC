@@ -3,15 +3,14 @@ from custom_user.models import AbstractEmailUser
 import uuid
 
 
-class User(AbstractEmailUser):
+class UserDiscord(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = None
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=40)
-    avatar_url = models.CharField(max_length=100, blank=True, null=True)
+    user_id = models.CharField(max_length=25, unique=True)
+    discord_id = models.CharField(max_length=25, unique=True)
 
-    class Meta:
-        db_table = 'auth_users'
+    faction = models.CharField(max_length=25, blank=False)
+    region = models.CharField(max_length=25, blank=False)
 
     def __str__(self):
-        return self.email
+        return "User with id : " + self.user_id + " has discord id : " + self.discord_id + "" \
+                " in region : " + self.region + " on faction : " + self.faction + '.'

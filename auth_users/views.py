@@ -101,7 +101,7 @@ def get_discord_url(request):
 
     discord_url = ('https://discord.com/api/oauth2/authorize?client_id={}'
                    '&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcreate'
-                   '&response_type=code'
+                   '&response_type=token'
                    '&scope=identify%20guilds').format(DISC_CLIENT_ID)
 
     return Response(discord_url, status=status.HTTP_200_OK)

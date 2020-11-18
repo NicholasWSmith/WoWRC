@@ -4,10 +4,10 @@ from env.constants import *
 class mongoDb:
 
     def __init__(self):
-        username = MONGO_USERNAME
-        password = MONGO_PASSWORD
-        db_url = DB_URL
-        db_name = DB_NAME
+        username = settings.MONGO_USERNAME
+        password = settings.MONGO_PASSWORD
+        db_url = settings.DB_URL
+        db_name = ''
         # "mongodb+srv://childish:<password>@cluster0.kkdqi.mongodb.net/<dbname>?retryWrites=true&w=majority"
         connect_url = 'mongodb+srv://{0}:{1}@{2}/{3}?retryWrites=true&w=majority'.format(
             username,

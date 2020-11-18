@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'WoWRC.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -142,11 +142,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'auth_users.serializers.RegisterSerializer'
-}
+# REST_AUTH_REGISTER_SERIALIZERS = {
+#     'REGISTER_SERIALIZER': 'auth_users.serializers.RegisterSerializer'
+# }
 
-AUTH_USER_MODEL = "auth_users.User"
 # Rest auth
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
@@ -170,9 +169,15 @@ try:
 
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID', BNET_CLIENT_ID)
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID', BNET_SECRET_ID)
+    MONGO_USERNAME = os.environ.get('MONGO_USERNAME', MONGO_USERNAME)
+    MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD', MONGO_PASSWORD)
+    DB_URL = os.environ.get('DB_URL', DB_URL)
 except Exception as e:
     CLIENT_ID = os.environ.get('BATTLE_NET_CLIENT_ID')
     SECRET_ID = os.environ.get('BATTLE_NET_SECRET_ID')
+    MONGO_USERNAME = os.environ.get('MONGO_USERNAME')
+    MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
+    DB_URL = os.environ.get('DB_URL')
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {

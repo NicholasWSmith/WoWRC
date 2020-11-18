@@ -97,8 +97,6 @@ DATABASES = {
     }
 }
 
-CLIENT = mongoDb().get_client()
-
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -178,6 +176,8 @@ except Exception as e:
     MONGO_USERNAME = os.environ.get('MONGO_USERNAME')
     MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
     DB_URL = os.environ.get('DB_URL')
+
+CLIENT = mongoDb().get_client()
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {

@@ -126,3 +126,7 @@ def test_mongo(request):
     players = db.runs.find_one({'boostersId.DPS.boosterId': '12345'})
 
     return Response(JSONEncoder().encode(players), status=status.HTTP_200_OK)
+
+
+def create_user_discord_link(request):
+    pass

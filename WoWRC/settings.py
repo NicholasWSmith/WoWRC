@@ -177,7 +177,10 @@ except Exception as e:
     MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
     DB_URL = os.environ.get('DB_URL')
 
-CLIENT = mongoDb().get_client()
+try:
+    CLIENT = mongoDb().get_client()
+except Exception as e:
+    print(str(e))
 
 SOCIALACCOUNT_PROVIDERS = {
     'battlenet': {

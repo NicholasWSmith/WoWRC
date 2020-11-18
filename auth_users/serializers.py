@@ -4,7 +4,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from django.utils.translation import gettext as _
 from rest_framework import serializers
-
+from .models import UserDiscord
 
 # class RegisterSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=allauth_settings.EMAIL_REQUIRED)
@@ -46,3 +46,14 @@ from rest_framework import serializers
 #         adapter.save_user(request, user, self)
 #         setup_user_email(request, user, [])
 #         return user
+
+
+class UserDiscordSerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField()
+    discord_id = serializers.CharField()
+    faction = serializers.CharField(required=False)
+    region = serializers.CharField(required=False)
+
+    class Meta:
+        model = UserDiscord
+        fields = '__all__'

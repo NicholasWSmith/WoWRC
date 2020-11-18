@@ -4,13 +4,6 @@ from django.conf import settings
 class mongoDb:
 
     def __init__(self):
-        self.client = None
-        self.init_client()
-
-    def get_client(self):
-        return self.client
-
-    def init_client(self):
         username = settings.MONGO_USERNAME
         password = settings.MONGO_PASSWORD
         db_url = settings.DB_URL
@@ -25,3 +18,6 @@ class mongoDb:
 
         client = pymongo.MongoClient(connect_url)
         self.client = client
+
+    def get_client(self):
+        return self.client

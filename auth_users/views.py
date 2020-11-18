@@ -130,3 +130,28 @@ def test_mongo(request):
 
 def create_user_discord_link(request):
     pass
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+@permission_classes((AllowAny,))
+def get_discord_user_roles(request, discord_id):
+    horde_db = settings.CLIENT['us-horde']
+    ally_db = settings.CLIENT['us-alliance']
+
+    import ipdb;
+    ipdb.set_trace()
+    player = horde_db.players.find({'discordid': int(discord_id)})
+    player_data = {}
+
+    if player.count() > 0:
+        player_data = player[0]
+    else:
+        player = ally_db.players.find({'discordid': int(discord_id)})
+
+    if player.count() > 0:
+        player_data = player[0]
+
+    if player.count() == 0:
+        return Response("Unable to find user", status=status.HTTP_404_NOT_FOUND)
+
+    return Response(player_data['DiscordRole'], status=status.HTTP_200_OK)

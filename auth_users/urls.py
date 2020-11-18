@@ -12,9 +12,9 @@ urlpatterns = [
         views.get_discord_url,
         name="get_discord_url"
     ),
-    path(
-        'test',
-        views.test_mongo,
-        name="get_discord_url"
+    re_path(
+        r'^discord/(?P<discord_id>[0-9]+)/roles$',
+        views.get_discord_user_roles,
+        name="get discord user roles"
     )
 ]

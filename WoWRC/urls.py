@@ -30,6 +30,6 @@ urlpatterns = [
     re_path(r'^rest-auth/registration/account-confirm-email/(?P<key>.+)/$',
             confirm_email, name='account_confirm_email'),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     re_path('.*', index, name="index")
 ]

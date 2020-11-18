@@ -8,4 +8,4 @@ django-custom-user
 xlrd
 pandas
 pymongo
-pymongo[srv]
+dnspython

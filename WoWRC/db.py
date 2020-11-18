@@ -1,4 +1,5 @@
 import pymongo
+from django.conf import settings
 
 class mongoDb:
 

@@ -1,5 +1,4 @@
 import pymongo
-from env.constants import *
 
 class mongoDb:
 

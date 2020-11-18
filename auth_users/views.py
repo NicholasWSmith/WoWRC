@@ -138,8 +138,6 @@ def get_discord_user_roles(request, discord_id):
     horde_db = settings.CLIENT['us-horde']
     ally_db = settings.CLIENT['us-alliance']
 
-    import ipdb;
-    ipdb.set_trace()
     player = horde_db.players.find({'discordid': int(discord_id)})
     player_data = {}
 

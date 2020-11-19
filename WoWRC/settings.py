@@ -94,6 +94,7 @@ try:
     DATABASES = {
         'default':  dj_database_url.config()
     }
+    print(DATABASES)
 except:
     DATABASES = {
         'default': {

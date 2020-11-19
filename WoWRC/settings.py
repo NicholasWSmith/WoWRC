@@ -52,8 +52,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.battlenet',
-    'custom_user'
+    'allauth.socialaccount.providers.battlenet'
 ]
 
 MIDDLEWARE = [

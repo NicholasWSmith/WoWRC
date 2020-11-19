@@ -89,13 +89,16 @@ WSGI_APPLICATION = 'WoWRC.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-try:
-    import dj_database_url
+
+import dj_database_url
+
+db = dj_database_url.config()
+
+if db != {}:
     DATABASES = {
-        'default':  dj_database_url.config()
+        'default':  dj_database_url.config(conn_max_age=600)
     }
-    print(DATABASES)
-except:
+else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

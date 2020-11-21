@@ -11,5 +11,5 @@ class UserDiscord(models.Model):
     region = models.CharField(max_length=25, blank=False)
 
     def __str__(self):
-        return "User with id : " + self.user_id + " has discord id : " + self.discord_id + "" \
-                " in region : " + self.region + " on faction : " + self.faction + '.'
+        return "User with id : " + str(self.user_id) + " has discord id : " + str(self.discord_id) + "" \
+               " in region : " + str(self.region) + " on faction : " + str(self.faction) + '.'

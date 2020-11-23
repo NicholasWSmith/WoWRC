@@ -16,6 +16,7 @@ from django.conf import settings
 from .busi_logic import *
 from .serializers import *
 from bson.objectid import ObjectId
+from django.views.decorators.csrf import csrf_exempt
 
 HUOKAN_SHEET_URL = 'https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ'
 
@@ -145,10 +146,7 @@ def get_discord_user_roles(request, discord_id):
     return Response(player_data['DiscordRole'], status=status.HTTP_200_OK)
 
 
-def to_object_id(id):
-    return ObjectId(id)
-
-
+@csrf_exempt
 @api_view(('GET', 'POST',))
 @renderer_classes((JSONRenderer,))
 @permission_classes((AllowAny,))
@@ -165,9 +163,12 @@ def get_post_total_pending_paid(request):
     elif request.method == "POST":
         paid_ids = request.data.get('id_list')
 
-        obj_ids = map(to_object_id, paid_ids)
+        obj_ids = []
 
-        runs = paid_runs_db.find({'_id': {'$in': obj_ids}})
+        for s_id in paid_ids:
+            obj_ids.append(ObjectId(s_id))
+
+        runs = paid_runs_db.MythicPlus.find({'_id': {'$in': obj_ids}})
 
         total_paid = calculate_paid_total(runs)
 

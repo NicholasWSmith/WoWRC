@@ -13,6 +13,10 @@ from rest_framework.decorators import api_view, renderer_classes, permission_cla
 from rest_framework.renderers import JSONRenderer
 import os
 from django.conf import settings
+from .busi_logic import *
+from .serializers import *
+from bson.objectid import ObjectId
+from django.views.decorators.csrf import csrf_exempt
 
 HUOKAN_SHEET_URL = 'https://docs.google.com/spreadsheets/d/155thp4_gWSQN8A8T-kqdxpBkLeueWPUXd3IUG62iMwQ'
 
@@ -121,19 +125,6 @@ class JSONEncoder(json.JSONEncoder):
 @api_view(('GET',))
 @renderer_classes((JSONRenderer,))
 @permission_classes((AllowAny,))
-def test_mongo(request):
-    db = settings.CLIENT['us-horde']
-    players = db.runs.find_one({'boostersId.DPS.boosterId': '12345'})
-
-    return Response(JSONEncoder().encode(players), status=status.HTTP_200_OK)
-
-
-def create_user_discord_link(request):
-    pass
-
-@api_view(('GET',))
-@renderer_classes((JSONRenderer,))
-@permission_classes((AllowAny,))
 def get_discord_user_roles(request, discord_id):
     horde_db = settings.CLIENT['us-horde']
     ally_db = settings.CLIENT['us-alliance']
@@ -153,3 +144,32 @@ def get_discord_user_roles(request, discord_id):
         return Response("Unable to find user", status=status.HTTP_404_NOT_FOUND)
 
     return Response(player_data['DiscordRole'], status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(('GET', 'POST',))
+@renderer_classes((JSONRenderer,))
+@permission_classes((AllowAny,))
+def get_post_total_pending_paid(request):
+    paid_runs_db = settings.CLIENT['PaidRuns']
+
+    if request.method == "GET":
+        runs = paid_runs_db.MythicPlus.find()
+
+        total_paid = calculate_paid_total(runs)
+
+        return Response(total_paid, status=status.HTTP_200_OK)
+
+    elif request.method == "POST":
+        paid_ids = request.data.get('id_list')
+
+        obj_ids = []
+
+        for s_id in paid_ids:
+            obj_ids.append(ObjectId(s_id))
+
+        runs = paid_runs_db.MythicPlus.find({'_id': {'$in': obj_ids}})
+
+        total_paid = calculate_paid_total(runs)
+
+        return Response(total_paid, status=status.HTTP_200_OK)

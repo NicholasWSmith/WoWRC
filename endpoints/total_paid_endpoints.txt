@@ -1,0 +1,37 @@
+
+Endpoints for the total_paid_endpoints.
+
+Takes GET or POST.
+
+Endpoint: https://huokan-backend.herokuapp.com/total_pending_paid
+
+When hit with a GET:
+
+    - Returns a dictionary where the key is the discord_id, and the value is the
+    - total pending paid in the DB.
+
+Ex:
+
+{
+  "4106350": 445.8,
+  "1064439": 97.5,
+  "2102265": 106.5,
+  "2207041": 49.5,
+  "1666621": 66.0,
+}
+
+When hit with a POST:
+
+    - Returns a dictionary where the key is the discord_id, and the value is the
+    - total pending paid in the DB, based on the list of string ID's it was given.
+
+Attribute: id_list
+Ex POST w/ id_list = ['123', '456', '789', '101112']:
+
+{
+  "4106350": 45.8,
+  "1064439": 17.5,
+  "2102265": 16.5,
+  "2207041": 9.5,
+  "1666621": 6.0,
+ }

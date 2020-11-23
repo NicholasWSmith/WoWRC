@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from .models import UserDiscord
 
+
 # class RegisterSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=allauth_settings.EMAIL_REQUIRED)
 #     first_name = serializers.CharField(required=True, write_only=True)

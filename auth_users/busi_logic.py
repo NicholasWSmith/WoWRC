@@ -17,22 +17,22 @@ def calculate_paid_total(runs):
         kh_cut = float(run['details']['Keyholder Cut'])
 
         for index, b_id in enumerate(ids):
-            if b_id in keys:
+            if b_id is not None:
+                if b_id not in keys:
+                    data[b_id] = 0.0
+
                 if index == 0:
                     data[b_id] += advertiser_cut
                 elif index in [1, 2, 3, 4]:
                     data[b_id] += booster_cut
-            else:
-                data[b_id] = 0.0
-                if index == 0:
-                    data[b_id] += advertiser_cut
-                elif index in [1, 2, 3, 4]:
-                    data[b_id] += booster_cut
+
+                data[b_id] = round(data[b_id], 2)
 
         kh = run.get('Key Holder', None)
 
         if kh is not None:
             kh_id = kh['boosterid']
-            data[kh_id] += kh_cut
+            if kh_id is not None:
+                data[kh_id] += kh_cut
 
     return data
